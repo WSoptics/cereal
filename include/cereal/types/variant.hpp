@@ -53,16 +53,16 @@ namespace cereal
     };
 
     //! @internal
-    template<int N, class Variant, class ... Args, class Archive>
+    template<std::size_t N, class Variant, class ... Args, class Archive>
     typename std::enable_if<N == std::variant_size_v<Variant>, void>::type
-    load_variant(Archive & /*ar*/, int /*target*/, Variant & /*variant*/)
+    load_variant(Archive & /*ar*/, std::size_t /*target*/, Variant & /*variant*/)
     {
       throw ::cereal::Exception("Error traversing variant during load");
     }
     //! @internal
-    template<int N, class Variant, class H, class ... T, class Archive>
+    template<std::size_t N, class Variant, class H, class ... T, class Archive>
     typename std::enable_if<N < std::variant_size_v<Variant>, void>::type
-    load_variant(Archive & ar, int target, Variant & variant)
+    load_variant(Archive & ar, std::size_t target, Variant & variant)
     {
       if(N == target)
       {
@@ -92,7 +92,7 @@ namespace cereal
   {
     using variant_t = typename std::variant<VariantTypes...>;
 
-    decltype(variant.index()) index;
+    std::size_t index;
     ar( CEREAL_NVP_("index", index) );
     if(index >= std::variant_size_v<variant_t>)
       throw Exception("Invalid 'index' selector when deserializing std::variant");
