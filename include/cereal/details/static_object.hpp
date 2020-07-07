@@ -92,10 +92,6 @@ namespace cereal
             LockGuard(std::mutex & m) : lock(m) {}
           private:
             std::unique_lock<std::mutex> lock;
-          #else
-          public:
-	          LockGuard(LockGuard const &) = default; // prevents implicit copy ctor warning
-            ~LockGuard() CEREAL_NOEXCEPT {} // prevents variable not used
           #endif
         };
 
